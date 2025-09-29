@@ -1,0 +1,10 @@
+{
+  "require": {
+    "bramus/router": "*",
+    "vlucas/phpdotenv": "*",
+    "ext-pdo": "*",
+    "ext-http": "*",
+    "ext-gd": "*",
+    "ext-fileinfo": "*"
+  }
+}
