@@ -23,6 +23,9 @@ jobs:
         run: |
           lftp -c "set ftp:list-options -a; open -u $FTP_USER,$FTP_PASS $FTP_HOST; mirror -R --verbose \
             --exclude-glob .github/ \
+            --exclude-glob .vscode/ \
+            --exclude-glob .git/ \
+            --exclude-glob .DS_Store \
             --exclude-glob LICENSE \
             --exclude-glob README.md \
             --exclude-glob .gitignore \
