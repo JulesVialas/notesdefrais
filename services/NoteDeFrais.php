@@ -377,7 +377,7 @@ class NoteDeFrais
                 $user = $userData['libelle'];
 
                 // Générer un numéro de pièce unique pour cet utilisateur ce mois-ci
-                $numeroPiece = $mois . str_pad($pieceCounter, 3, '0', STR_PAD_LEFT);
+                $datefixeExport = $mois . str_pad($pieceCounter, 3, '0', STR_PAD_LEFT);
                 $pieceCounter++;
 
                 // Calculer le total pour cet utilisateur
@@ -405,20 +405,20 @@ class NoteDeFrais
                     $totalUtilisateur += $ticket['TotalTTC'];
 
                     // Ligne de charge HT
-                    $content .= 'HA;' . $numeroPiece . ';' . $ticket['CompteComptable'] . ';;G;0;;' .
+                    $content .= 'HA;' . $datefixeExport . ';' . $ticket['CompteComptable'] . ';;G;0;;' .
                         $ticket['TypeDepense'] . ';' . $totalHTFormatted . ';D;' . $LibelleEcriture . "\r\n";
 
                     // Ligne analytique
                     $userId = $utilisateurService->getUserIdByLibelle($user);
                     $codeAnalytique = $userId ? $utilisateurService->getCodeAnalytique($userId) : '';
 
-                    $content .= 'HA;' . $numeroPiece . ';' . $ticket['CompteComptable'] . ';' .
+                    $content .= 'HA;' . $datefixeExport . ';' . $ticket['CompteComptable'] . ';' .
                         $codeAnalytique . ';A;1;' . $ticket['NumeroAffaire'] . ';' .
                         $ticket['TypeDepense'] . ';' . $totalHTFormatted . ';D;' . $LibelleEcriture . "\r\n";
 
                     // Ligne TVA si applicable
                     if ($ticket['TotalTVA'] > 0) {
-                        $content .= 'HA;' . $numeroPiece . ';445660000;;G;0;;TVA;' .
+                        $content .= 'HA;' . $datefixeExport . ';445660000;;G;0;;TVA;' .
                             $totalTVAFormatted . ';D;' . $LibelleEcriture . "\r\n";
                     }
                 }
@@ -430,7 +430,7 @@ class NoteDeFrais
 
                 $LibelleEcritureUser = 'NDF_' . $user . '_' . substr($mois, 4, 2);
 
-                $content .= 'HA;' . $numeroPiece . ';425000000;' . $codeTiers .
+                $content .= 'HA;' . $datefixeExport . ';425000000;' . $codeTiers .
                     ';G;0;;;' . $totalUtilisateurFormatted . ';C;' . $LibelleEcritureUser . "\r\n";
             }
 
