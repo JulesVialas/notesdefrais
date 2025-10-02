@@ -492,6 +492,63 @@ class Ticket
     }
 
     /**
+     * Met à jour un ticket existant
+     *
+     * @param int $ticketId Identifiant du ticket à modifier
+     * @param array $ticketData Nouvelles données du ticket
+     * @return bool True si la mise à jour a réussi, False sinon
+     */
+    public function modifierTicket(int $ticketId, array $ticketData): bool
+    {
+        // Validation des données obligatoires
+        if (empty($ticketData['date_justificatif']) || 
+            empty($ticketData['type_depense']) || 
+            empty($ticketData['total_ttc']) ||
+            empty($ticketData['numero_affaire'])) {
+            return false;
+        }
+
+        try {
+            $pdo = Database::getPDO();
+            
+            // Récupération du compte comptable basé sur le type de dépense
+            $compteComptable = $this->typeDepense->getCompteComptableByType($ticketData['type_depense']);
+            
+            $sql = "UPDATE Ticket SET
+                        DateJustificatif = :dateJustificatif,
+                        NumeroAffaire = :numeroAffaire,
+                        CompteComptable = :compteComptable,
+                        TypeDepense = :typeDepense,
+                        TotalTTC = :totalTTC,
+                        TotalTVA = :totalTVA,
+                        Commentaires = :commentaires
+                    WHERE Identifiant = :id";
+
+            $stmt = $pdo->prepare($sql);
+            $result = $stmt->execute([
+                'id' => $ticketId,
+                'dateJustificatif' => $ticketData['date_justificatif'],
+                'numeroAffaire' => $ticketData['numero_affaire'],
+                'compteComptable' => $compteComptable,
+                'typeDepense' => $ticketData['type_depense'],
+                'totalTTC' => floatval($ticketData['total_ttc']),
+                'totalTVA' => floatval($ticketData['total_tva'] ?? 0),
+                'commentaires' => $ticketData['commentaires'] ?? ''
+            ]);
+
+            if ($result) {
+                // Recharger les tickets en mémoire après modification
+                $this->rechargerTickets();
+            }
+
+            return $result;
+        } catch (\PDOException $e) {
+            error_log("Erreur lors de la modification du ticket: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Réinitialise le statut de tous les tickets d'une note de frais
      *
      * @param int $noteDeFraisId Identifiant de la note de frais
