@@ -7,6 +7,8 @@ use services\NoteDeFrais;
 use services\Ticket;
 use services\Utilisateur;
 use services\Mail;
+use services\TypeDepense;
+use services\Config;
 
 /**
  * Contrôleur pour la gestion d'une note de frais spécifique
@@ -18,6 +20,7 @@ class TraitementNoteDeFraisController
     private MotifRejet $motifRejet;
     private Utilisateur $utilisateur;
     private Mail $mailService;
+    private TypeDepense $typeDepense;
     private string $viewPath;
 
     public function __construct($mode = 'verification')
@@ -27,6 +30,7 @@ class TraitementNoteDeFraisController
         $this->motifRejet = new MotifRejet();
         $this->utilisateur = new Utilisateur();
         $this->mailService = new Mail();
+        $this->typeDepense = new TypeDepense();
         $this->viewPath = __DIR__ . '/../views/traitement-note-de-frais.php';
     }
 
@@ -138,6 +142,7 @@ class TraitementNoteDeFraisController
         $noteDeFraisDetails = $this->noteDeFrais->getNoteDeFraisById($id);
         $tickets = $this->ticket->getTicketsByNoteDeFrais($id);
         $motifsRejet = $this->motifRejet->getMotifsRejet();
+        $typesDepenses = $this->typeDepense->getTypesDepenses();
 
         require $this->viewPath;
     }
