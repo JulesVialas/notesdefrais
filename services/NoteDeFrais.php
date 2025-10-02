@@ -358,25 +358,29 @@ class NoteDeFrais
         foreach ($ticketsByMonth as $mois => $tickets) {
             $content = "";
 
-            // Grouper les tickets par utilisateur pour créer une pièce comptable par utilisateur
-            $ticketsByUser = [];
+            // Grouper les tickets par utilisateur et par note de frais pour créer une pièce comptable par utilisateur/note
+            $ticketsByUserAndNote = [];
             foreach ($tickets as $ticket) {
                 $user = $ticket['LibelleUtilisateur'];
+                $dateDemande = $ticket['DateDemande'];
                 $parts = preg_split('/\s+/', trim(mb_strtolower($user)));
                 sort($parts);
                 $userKey = implode(' ', $parts);
-                $ticketsByUser[$userKey]['tickets'][] = $ticket;
-                $ticketsByUser[$userKey]['libelle'] = $user;
+                // Créer une clé unique combinant utilisateur et date de demande (note de frais)
+                $userNoteKey = $userKey . '_' . $dateDemande;
+                $ticketsByUserAndNote[$userNoteKey]['tickets'][] = $ticket;
+                $ticketsByUserAndNote[$userNoteKey]['libelle'] = $user;
+                $ticketsByUserAndNote[$userNoteKey]['dateDemande'] = $dateDemande;
             }
 
-            // Générer un numéro de pièce unique pour chaque utilisateur
-            $pieceCounter++;
-
-            foreach ($ticketsByUser as $userKey => $userData) {
+            foreach ($ticketsByUserAndNote as $userNoteKey => $userData) {
+                // Incrémenter le compteur de pièce pour chaque combinaison utilisateur/note de frais dans chaque mois
+                $pieceCounter++;
                 $userTickets = $userData['tickets'];
                 $user = $userData['libelle'];
+                $dateDemande = $userData['dateDemande'];
 
-                // Générer un numéro de pièce unique pour cet utilisateur ce mois-ci
+                // Générer un numéro de pièce unique pour cet utilisateur/note ce mois-ci
                 $datefixeExport = $mois . str_pad($pieceCounter, 3, '0', STR_PAD_LEFT);
                 
 
