@@ -354,7 +354,7 @@ class NoteDeFrais
         if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
             throw new \Exception("Impossible de créer l'archive ZIP");
         }
-
+        $pieceCounter = 0;
         foreach ($ticketsByMonth as $mois => $tickets) {
             $content = "";
 
@@ -370,7 +370,7 @@ class NoteDeFrais
             }
 
             // Générer un numéro de pièce unique pour chaque utilisateur
-            $pieceCounter = 1;
+            $pieceCounter++;
 
             foreach ($ticketsByUser as $userKey => $userData) {
                 $userTickets = $userData['tickets'];
@@ -378,7 +378,7 @@ class NoteDeFrais
 
                 // Générer un numéro de pièce unique pour cet utilisateur ce mois-ci
                 $datefixeExport = $mois . str_pad($pieceCounter, 3, '0', STR_PAD_LEFT);
-                $pieceCounter++;
+                
 
                 // Calculer le total pour cet utilisateur
                 $totalUtilisateur = 0;
