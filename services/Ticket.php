@@ -512,7 +512,7 @@ class Ticket
             $pdo = Database::getPDO();
             
             // Récupération du compte comptable basé sur le type de dépense
-            $compteComptable = $this->typeDepense->getCompteComptableByType($ticketData['type_depense']);
+            $compteComptable = $this->typeDepense->getCompteComptable($ticketData['type_depense']);
             
             $sql = "UPDATE Ticket SET
                         DateJustificatif = :dateJustificatif,
