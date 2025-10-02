@@ -363,15 +363,15 @@ class NoteDeFrais
             foreach ($tickets as $ticket) {
                 $user = $ticket['LibelleUtilisateur'];
                 $dateDemande = $ticket['DateDemande'];
-                $parts = preg_split('/\s+/', trim(mb_strtolower($user)));
-                sort($parts);
-                $userKey = implode(' ', $parts);
                 // Créer une clé unique combinant utilisateur et date de demande (note de frais)
-                $userNoteKey = $userKey . '_' . $dateDemande;
+                $userNoteKey = $user . '_' . $dateDemande;
                 $ticketsByUserAndNote[$userNoteKey]['tickets'][] = $ticket;
                 $ticketsByUserAndNote[$userNoteKey]['libelle'] = $user;
                 $ticketsByUserAndNote[$userNoteKey]['dateDemande'] = $dateDemande;
             }
+
+            // Trier les clés pour assurer un ordre cohérent
+            ksort($ticketsByUserAndNote);
 
             foreach ($ticketsByUserAndNote as $userNoteKey => $userData) {
                 // Incrémenter le compteur de pièce pour chaque combinaison utilisateur/note de frais dans chaque mois
