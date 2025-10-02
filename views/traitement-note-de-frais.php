@@ -203,7 +203,7 @@
                             <h5 class="modal-title">Modifier le ticket</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form method="post" enctype="multipart/form-data">
+                        <form method="post">
                             <div class="modal-body">
                                 <input type="hidden" name="action" value="modifier_ticket">
                                 <input type="hidden" name="ticket_id" value="<?= $ticket['Identifiant'] ?>">
@@ -287,34 +287,6 @@
                                                id="commentaires_<?= $ticket['Identifiant'] ?>"
                                                name="commentaires"
                                                value="<?= htmlspecialchars($ticket['Commentaires'] ?? '') ?>">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="form-label">Justificatif actuel</label>
-                                        <?php if (!empty($ticket['CheminJustificatif'])): ?>
-                                            <?php
-                                            $justificatifPath = $ticket['CheminJustificatif'];
-                                            if (strpos($justificatifPath, 'http') !== 0) {
-                                                if (strpos($justificatifPath, '/notesdefrais/') === 0) {
-                                                    $justificatifPath = substr($justificatifPath, strlen('/notesdefrais/'));
-                                                }
-                                                $justificatifPath = preg_replace('/(valider-ticket\/|verifier-ticket\/)/i', '', $justificatifPath);
-                                                $baseUrl = rtrim(Config::get("APP_URL"), '/');
-                                                $justificatifPath = $baseUrl . '/' . ltrim($justificatifPath, '/');
-                                            }
-                                            ?>
-                                            <div class="mb-2">
-                                                <img src="<?= $justificatifPath ?>" class="img-thumbnail" style="max-height: 100px;">
-                                            </div>
-                                        <?php else: ?>
-                                            <p class="text-muted">Aucun justificatif</p>
-                                        <?php endif; ?>
-                                        
-                                        <label for="nouveau_justificatif_<?= $ticket['Identifiant'] ?>" class="form-label">Nouveau justificatif (optionnel)</label>
-                                        <input type="file" class="form-control" 
-                                               id="nouveau_justificatif_<?= $ticket['Identifiant'] ?>"
-                                               name="nouveau_justificatif"
-                                               accept="image/*">
-                                        <div class="form-text">Laissez vide pour conserver le justificatif actuel</div>
                                     </div>
                                 </div>
                             </div>
