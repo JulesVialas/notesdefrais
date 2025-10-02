@@ -405,21 +405,21 @@ class NoteDeFrais
                     $totalUtilisateur += $ticket['TotalTTC'];
 
                     // Ligne de charge HT
-                    $content .= 'HA;' . $datefixeExport . ';' . $ticket['CompteComptable'] . ';;G;0;;' .
-                        $ticket['TypeDepense'] . ';' . $totalHTFormatted . ';D;' . $LibelleEcriture . "\r\n";
+                    $content .= 'HA;' . $pieceCounter . ';' . $ticket['CompteComptable'] . ';;G;0;;' .
+                        $ticket['TypeDepense'] . ';' . $totalHTFormatted . ';D;' . $LibelleEcriture . "_" . $datefixeExport . "\r\n";
 
                     // Ligne analytique
                     $userId = $utilisateurService->getUserIdByLibelle($user);
                     $codeAnalytique = $userId ? $utilisateurService->getCodeAnalytique($userId) : '';
 
-                    $content .= 'HA;' . $datefixeExport . ';' . $ticket['CompteComptable'] . ';' .
+                    $content .= 'HA;' . $pieceCounter . ';' . $ticket['CompteComptable'] . ';' .
                         $codeAnalytique . ';A;1;' . $ticket['NumeroAffaire'] . ';' .
-                        $ticket['TypeDepense'] . ';' . $totalHTFormatted . ';D;' . $LibelleEcriture . "\r\n";
+                        $ticket['TypeDepense'] . ';' . $totalHTFormatted . ';D;' . $LibelleEcriture . "_" . $datefixeExport .  "\r\n";
 
                     // Ligne TVA si applicable
                     if ($ticket['TotalTVA'] > 0) {
-                        $content .= 'HA;' . $datefixeExport . ';445660000;;G;0;;TVA;' .
-                            $totalTVAFormatted . ';D;' . $LibelleEcriture . "\r\n";
+                        $content .= 'HA;' . $pieceCounter . ';445660000;;G;0;;TVA;' .
+                            $totalTVAFormatted . ';D;' . $LibelleEcriture . "_" . $datefixeExport .  "\r\n";
                     }
                 }
 
@@ -430,8 +430,8 @@ class NoteDeFrais
 
                 $LibelleEcritureUser = 'NDF_' . $user . '_' . substr($mois, 4, 2);
 
-                $content .= 'HA;' . $datefixeExport . ';425000000;' . $codeTiers .
-                    ';G;0;;;' . $totalUtilisateurFormatted . ';C;' . $LibelleEcritureUser . "\r\n";
+                $content .= 'HA;' . $pieceCounter . ';425000000;' . $codeTiers .
+                    ';G;0;;;' . $totalUtilisateurFormatted . ';C;' . $LibelleEcritureUser . "_" . $datefixeExport .  "\r\n";
             }
 
             $txtFilename = "NDF_" . $mois . ".txt";
