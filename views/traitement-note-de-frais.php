@@ -193,110 +193,108 @@
 
     <!-- Modifier Modals -->
     <?php foreach ($tickets as $ticket): ?>
-        <?php if ($ticket['Statut'] !== 'Validé' && $ticket['Statut'] !== 'Refusé'): ?>
-            <div class="modal fade" id="modifierModal<?= $ticket['Identifiant'] ?>" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Modifier le ticket</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form method="post">
-                            <div class="modal-body">
-                                <input type="hidden" name="action" value="modifier_ticket">
-                                <input type="hidden" name="ticket_id" value="<?= $ticket['Identifiant'] ?>">
-                                
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="date_justificatif_<?= $ticket['Identifiant'] ?>" class="form-label">Date du justificatif</label>
-                                        <input type="date" class="form-control" 
-                                               id="date_justificatif_<?= $ticket['Identifiant'] ?>"
-                                               name="date_justificatif"
-                                               max="<?= date('Y-m-d') ?>"
-                                               value="<?= $ticket['DateJustificatif'] ?>"
-                                               required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="numero_affaire_<?= $ticket['Identifiant'] ?>" class="form-label">Numéro d'affaire</label>
-                                        <input type="text" class="form-control" 
-                                               id="numero_affaire_<?= $ticket['Identifiant'] ?>"
-                                               name="numero_affaire"
-                                               value="<?= htmlspecialchars($ticket['NumeroAffaire']) ?>"
-                                               required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="type_depense_<?= $ticket['Identifiant'] ?>" class="form-label">Type de dépense</label>
-                                        <select class="form-select type-depense-select" 
-                                                id="type_depense_<?= $ticket['Identifiant'] ?>"
-                                                name="type_depense" 
+        <div class="modal fade" id="modifierModal<?= $ticket['Identifiant'] ?>" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modifier le ticket</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="post">
+                        <div class="modal-body">
+                            <input type="hidden" name="action" value="modifier_ticket">
+                            <input type="hidden" name="ticket_id" value="<?= $ticket['Identifiant'] ?>">
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="date_justificatif_<?= $ticket['Identifiant'] ?>" class="form-label">Date du justificatif</label>
+                                    <input type="date" class="form-control" 
+                                            id="date_justificatif_<?= $ticket['Identifiant'] ?>"
+                                            name="date_justificatif"
+                                            max="<?= date('Y-m-d') ?>"
+                                            value="<?= $ticket['DateJustificatif'] ?>"
+                                            required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="numero_affaire_<?= $ticket['Identifiant'] ?>" class="form-label">Numéro d'affaire</label>
+                                    <input type="text" class="form-control" 
+                                            id="numero_affaire_<?= $ticket['Identifiant'] ?>"
+                                            name="numero_affaire"
+                                            value="<?= htmlspecialchars($ticket['NumeroAffaire']) ?>"
+                                            required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="type_depense_<?= $ticket['Identifiant'] ?>" class="form-label">Type de dépense</label>
+                                    <select class="form-select type-depense-select" 
+                                            id="type_depense_<?= $ticket['Identifiant'] ?>"
+                                            name="type_depense" 
+                                            data-ticket-id="<?= $ticket['Identifiant'] ?>"
+                                            required>
+                                        <option value="">Choisir un type de dépense</option>
+                                        <?php if (isset($typesDepenses) && is_array($typesDepenses)): ?>
+                                            <?php foreach ($typesDepenses as $typeDepense): ?>
+                                                <option value="<?= htmlspecialchars($typeDepense['Libelle']) ?>"
+                                                        data-tva="<?= $typeDepense['tva'] ? '1' : '0' ?>"
+                                                        <?= ($ticket['TypeDepense'] === $typeDepense['Libelle']) ? 'selected' : '' ?>>
+                                                    <?= htmlspecialchars($typeDepense['Libelle']) ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="total_ttc_<?= $ticket['Identifiant'] ?>" class="form-label">Total TTC</label>
+                                    <div class="input-group">
+                                        <input type="number" step="0.01" class="form-control total-ttc-input" 
+                                                id="total_ttc_<?= $ticket['Identifiant'] ?>"
+                                                name="total_ttc"
                                                 data-ticket-id="<?= $ticket['Identifiant'] ?>"
+                                                value="<?= $ticket['TotalTTC'] ?>"
                                                 required>
-                                            <option value="">Choisir un type de dépense</option>
-                                            <?php if (isset($typesDepenses) && is_array($typesDepenses)): ?>
-                                                <?php foreach ($typesDepenses as $typeDepense): ?>
-                                                    <option value="<?= htmlspecialchars($typeDepense['Libelle']) ?>"
-                                                            data-tva="<?= $typeDepense['tva'] ? '1' : '0' ?>"
-                                                            <?= ($ticket['TypeDepense'] === $typeDepense['Libelle']) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($typeDepense['Libelle']) ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            <?php endif; ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="total_ttc_<?= $ticket['Identifiant'] ?>" class="form-label">Total TTC</label>
-                                        <div class="input-group">
-                                            <input type="number" step="0.01" class="form-control total-ttc-input" 
-                                                   id="total_ttc_<?= $ticket['Identifiant'] ?>"
-                                                   name="total_ttc"
-                                                   data-ticket-id="<?= $ticket['Identifiant'] ?>"
-                                                   value="<?= $ticket['TotalTTC'] ?>"
-                                                   required>
-                                            <span class="input-group-text">€</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 tva-field-<?= $ticket['Identifiant'] ?>" 
-                                         style="display: <?= ($ticket['TotalTVA'] > 0) ? 'block' : 'none' ?>;">
-                                        <label for="taux_tva_<?= $ticket['Identifiant'] ?>" class="form-label">Taux de TVA</label>
-                                        <div class="input-group">
-                                            <input type="number" step="0.1" max="100" class="form-control taux-tva-input" 
-                                                   id="taux_tva_<?= $ticket['Identifiant'] ?>"
-                                                   name="taux_tva" 
-                                                   data-ticket-id="<?= $ticket['Identifiant'] ?>"
-                                                   value="<?= ($ticket['TotalTTC'] > 0 && $ticket['TotalTVA'] > 0) ? round(($ticket['TotalTVA'] / ($ticket['TotalTTC'] - $ticket['TotalTVA'])) * 100, 1) : '20.0' ?>">
-                                            <span class="input-group-text">%</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 tva-field-<?= $ticket['Identifiant'] ?>" 
-                                         style="display: <?= ($ticket['TotalTVA'] > 0) ? 'block' : 'none' ?>;">
-                                        <label for="total_tva_<?= $ticket['Identifiant'] ?>" class="form-label">Montant TVA</label>
-                                        <div class="input-group">
-                                            <input type="number" step="0.01" class="form-control total-tva-input" 
-                                                   id="total_tva_<?= $ticket['Identifiant'] ?>"
-                                                   name="total_tva"
-                                                   data-ticket-id="<?= $ticket['Identifiant'] ?>"
-                                                   value="<?= $ticket['TotalTVA'] ?>">
-                                            <span class="input-group-text">€</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="commentaires_<?= $ticket['Identifiant'] ?>" class="form-label">Commentaires</label>
-                                        <input type="text" class="form-control" 
-                                               id="commentaires_<?= $ticket['Identifiant'] ?>"
-                                               name="commentaires"
-                                               value="<?= htmlspecialchars($ticket['Commentaires'] ?? '') ?>">
+                                        <span class="input-group-text">€</span>
                                     </div>
                                 </div>
+                                <div class="col-md-6 tva-field-<?= $ticket['Identifiant'] ?>" 
+                                        style="display: <?= ($ticket['TotalTVA'] > 0) ? 'block' : 'none' ?>;">
+                                    <label for="taux_tva_<?= $ticket['Identifiant'] ?>" class="form-label">Taux de TVA</label>
+                                    <div class="input-group">
+                                        <input type="number" step="0.1" max="100" class="form-control taux-tva-input" 
+                                                id="taux_tva_<?= $ticket['Identifiant'] ?>"
+                                                name="taux_tva" 
+                                                data-ticket-id="<?= $ticket['Identifiant'] ?>"
+                                                value="<?= ($ticket['TotalTTC'] > 0 && $ticket['TotalTVA'] > 0) ? round(($ticket['TotalTVA'] / ($ticket['TotalTTC'] - $ticket['TotalTVA'])) * 100, 1) : '20.0' ?>">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 tva-field-<?= $ticket['Identifiant'] ?>" 
+                                        style="display: <?= ($ticket['TotalTVA'] > 0) ? 'block' : 'none' ?>;">
+                                    <label for="total_tva_<?= $ticket['Identifiant'] ?>" class="form-label">Montant TVA</label>
+                                    <div class="input-group">
+                                        <input type="number" step="0.01" class="form-control total-tva-input" 
+                                                id="total_tva_<?= $ticket['Identifiant'] ?>"
+                                                name="total_tva"
+                                                data-ticket-id="<?= $ticket['Identifiant'] ?>"
+                                                value="<?= $ticket['TotalTVA'] ?>">
+                                        <span class="input-group-text">€</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="commentaires_<?= $ticket['Identifiant'] ?>" class="form-label">Commentaires</label>
+                                    <input type="text" class="form-control" 
+                                            id="commentaires_<?= $ticket['Identifiant'] ?>"
+                                            name="commentaires"
+                                            value="<?= htmlspecialchars($ticket['Commentaires'] ?? '') ?>">
+                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                <button type="submit" class="btn btn-primary">Modifier</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary">Modifier</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        <?php endif; ?>
+        </div>
     <?php endforeach; ?>
 </div>
 
