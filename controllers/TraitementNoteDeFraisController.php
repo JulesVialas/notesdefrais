@@ -125,14 +125,6 @@ class TraitementNoteDeFraisController
                 // Modifier le ticket
                 $result = $this->ticket->modifierTicket($ticketId, $ticketData);
 
-                if ($result) {
-                    // Mettre à jour le statut de la note de frais
-                    $this->noteDeFrais->mettreAJourStatutSelonTickets($id);
-                    $_SESSION['flash_success'] = "Le ticket a été modifié avec succès.";
-                } else {
-                    $_SESSION['flash_error'] = "Une erreur s'est produite lors de la modification du ticket.";
-                }
-
                 // Rediriger vers la même page
                 header("Location: " . $_SERVER['REQUEST_URI']);
                 exit();
