@@ -133,24 +133,22 @@
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <?php if ($ticket['Statut'] !== 'Validé' && $ticket['Statut'] !== 'Refusé'): ?>
-                                            <form method="post" class="d-inline">
-                                                <input type="hidden" name="action" value="valider_ticket">
-                                                <input type="hidden" name="ticket_id"
-                                                       value="<?= $ticket['Identifiant'] ?>">
-                                                <button type="submit" class="btn btn-sm btn-success">
-                                                    <i class="fas fa-check"></i> Valider
-                                                </button>
-                                            </form>
-                                            <button type="button" class="btn btn-sm btn-primary me-1" data-bs-toggle="modal"
-                                                    data-bs-target="#modifierModal<?= $ticket['Identifiant'] ?>">
-                                                <i class="fas fa-edit"></i> Modifier
+                                        <form method="post" class="d-inline">
+                                            <input type="hidden" name="action" value="valider_ticket">
+                                            <input type="hidden" name="ticket_id"
+                                                    value="<?= $ticket['Identifiant'] ?>">
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                <i class="fas fa-check"></i> Valider
                                             </button>
-                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                                    data-bs-target="#refuserModal<?= $ticket['Identifiant'] ?>">
-                                                <i class="fas fa-times"></i> Refuser
-                                            </button>
-                                        <?php endif; ?>
+                                        </form>
+                                        <button type="button" class="btn btn-sm btn-primary me-1" data-bs-toggle="modal"
+                                                data-bs-target="#modifierModal<?= $ticket['Identifiant'] ?>">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                data-bs-target="#refuserModal<?= $ticket['Identifiant'] ?>">
+                                            <i class="fas fa-times"></i> Refuser
+                                        </button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
