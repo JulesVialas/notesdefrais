@@ -354,7 +354,7 @@ class NoteDeFrais
         if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
             throw new \Exception("Impossible de créer l'archive ZIP");
         }
-        $pieceCounter = 0;
+        $pieceCounter = 00;
         foreach ($ticketsByMonth as $mois => $tickets) {
             $content = "";
 
@@ -409,20 +409,20 @@ class NoteDeFrais
                     $totalUtilisateur += $ticket['TotalTTC'];
 
                     // Ligne de charge HT
-                    $content .= 'HA;' . $pieceCounter . $moisFormat . $annee . ';' . $ticket['CompteComptable'] . ';;G;0;;' .
+                    $content .= 'HA;' . str_pad($pieceCounter, 2, '0', STR_PAD_LEFT) . $moisFormat . $annee . ';' . $ticket['CompteComptable'] . ';;G;0;;' .
                         $ticket['TypeDepense'] . "_" .$datefixeExport . ';' . $totalHTFormatted . ';D;' . $LibelleEcriture . "\r\n";
 
                     // Ligne analytique
                     $userId = $utilisateurService->getUserIdByLibelle($user);
                     $codeAnalytique = $userId ? $utilisateurService->getCodeAnalytique($userId) : '';
 
-                    $content .= 'HA;' . $pieceCounter . $moisFormat . $annee . ';' . $ticket['CompteComptable'] . ';' .
+                    $content .= 'HA;' . str_pad($pieceCounter, 2, '0', STR_PAD_LEFT) . $moisFormat . $annee . ';' . $ticket['CompteComptable'] . ';' .
                         $codeAnalytique . ';A;1;' . $ticket['NumeroAffaire'] . ';' .
                         $ticket['TypeDepense'] . "_" . $datefixeExport . ';' . $totalHTFormatted . ';D;' . $LibelleEcriture .  "\r\n";
 
                     // Ligne TVA si applicable
                     if ($ticket['TotalTVA'] > 0) {
-                        $content .= 'HA;' . $pieceCounter . $moisFormat . $annee . ';445660000;;G;0;;TVA;' .
+                        $content .= 'HA;' . str_pad($pieceCounter, 2, '0', STR_PAD_LEFT) . $moisFormat . $annee . ';445660000;;G;0;;TVA;' .
                             $totalTVAFormatted . ';D;' . $LibelleEcriture .  "\r\n";
                     }
                 }
@@ -434,7 +434,7 @@ class NoteDeFrais
 
                 $LibelleEcritureUser = 'NDF_' . $user . '_' . substr($mois, 4, 2);
 
-                $content .= 'HA;' . $pieceCounter . $moisFormat . $annee . ';425000000;' . $codeTiers .
+                $content .= 'HA;' . str_pad($pieceCounter, 2, '0', STR_PAD_LEFT) . $moisFormat . $annee . ';425000000;' . $codeTiers .
                     ';G;0;;;' . $totalUtilisateurFormatted . ';C;' . $LibelleEcritureUser .  "\r\n";
             }
 
