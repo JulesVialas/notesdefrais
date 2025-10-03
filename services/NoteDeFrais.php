@@ -435,7 +435,7 @@ class NoteDeFrais
                 $LibelleEcritureUser = 'NDF_' . $user . '_' . substr($mois, 4, 2);
 
                 $content .= 'HA;' . str_pad($pieceCounter, 2, '0', STR_PAD_LEFT) . $moisFormat . $annee . ';425000000;' . $codeTiers .
-                    ';G;0;;;' . $totalUtilisateurFormatted . ';C;' . $LibelleEcritureUser .  "\r\n";
+                    ';G;0;;' . $LibelleEcritureUser . ';' . $totalUtilisateurFormatted . ';C;' . $LibelleEcritureUser .  "\r\n";
             }
 
             $txtFilename = "NDF_" . $moisFormat . ".txt";
